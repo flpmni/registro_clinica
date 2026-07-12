@@ -162,9 +162,8 @@ def validar_edad(edad: Any) -> int:
     if isinstance(edad, float) and not edad.is_integer():
         raise ValueError("La edad no puede contener decimales.")
 
-    if isinstance(edad, str):
-        if not re.fullmatch(r"\d{1,3}", edad.strip()):
-            raise ValueError("La edad debe contener solo números enteros.")
+    if isinstance(edad, str) and not re.fullmatch(r"\d{1,3}", edad.strip()):
+        raise ValueError("La edad debe contener solo números enteros.")
 
     if edad_numerica < EDAD_MINIMA or edad_numerica > EDAD_MAXIMA:
         raise ValueError(
