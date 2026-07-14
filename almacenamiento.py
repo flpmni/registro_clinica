@@ -10,11 +10,10 @@ ARCHIVO_PACIENTES = DIRECTORIO_DATOS / "pacientes.json"
 ARCHIVO_HASH = DIRECTORIO_DATOS / "pacientes.sha256"
 
 class ErrorIntegridadDatos(Exception):
- # Se produce cuando el archivo no coincide con su hash.
+    """Se produce cuando el archivo no coincide con su hash."""
 
 class ErrorAlmacenamiento(Exception):
-
- # Se produce cuando no es posible leer o escribir los datos.
+    """Se produce cuando no es posible leer o escribir los datos."""
 
 def preparar_diretorio() -> None:
 
@@ -46,7 +45,7 @@ def calcular_hash_archivo(ruta: Path) -> str:
 
 def guardar_hash() -> None:
 
-    if not archivo_pacientes.exists():
+    if not ARCHIVO_PACIENTES.exists():
         raise ErrorAlmacenamiento(
             "no existe el rchivo de pacientes."
         )
@@ -79,7 +78,8 @@ def verificar_integridad() -> bool:
         raise ErrorAlmacenamiento(
             "no fue posible leer el archivo de integridad."
         ) from error
-    has_actual = calcular_hash_archivo(ARCHIVO_PACIENTES)
+    
+    hash_actual = calcular_hash_archivo(ARCHIVO_PACIENTES)
 
     if not hash_guardado:
         raise ErrorIntegridadDatos(
@@ -126,6 +126,7 @@ def cargar_pacientes() -> list [dict[str, any]]:
     return pacientes_validos
 #Carga los pacientes almacenados.
 #Si el archivo no existe, retorna una lista vacía.
+
 def escritura_atomica(
         ruta: Path,
         contenido: str,
@@ -140,7 +141,44 @@ def escritura_atomica(
         )
 
         os.replace(ruta_temporal, ruta)
+    except OSError as error:
+        try:
+            if ruta_temporal.exists():
+                ruta_temporal.unlink()
+        except OSError:
+            pass
+        raise ErrorAlmacenamiento(
+            "no fue posible guardar los datos."
+        ) from error
 #Escribe primero en un archivo temporal y luego lo reemplaza.
 #Esta técnica reduce el riesgo de dejar un archivo incompleto si
 #ocurre un problema durant
+
+def guardar_pacientes(
+        pacientes:list [dict[str,any]]
+) -> None:
     
+    preparar_diretorio()
+
+    if not isinstance(pacientes,list):
+        raise ErrorAlmacenamiento(
+            "los pacientes deben almacenarse en una lista."
+        )
+    try:
+        contenido = json.dump(
+            pacientes,
+            ensure_ascii=False,
+            indent=4,
+        )
+    except (TypeError, ValueError) as error:
+        raise ErrorAlmacenamiento(
+            "los datos no pueden convertirse a JSON."
+        ) from error
+    
+    escritura_atomica(
+        ARCHIVO_PACIENTES,
+        contenido,
+    )
+
+    guardar_hash()
+#Guarda la lista completa de pacientes.
