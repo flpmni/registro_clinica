@@ -110,7 +110,7 @@ def verificar_integridad() -> bool:
         )
     return True
 
-def cargar_pacientes() -> list [dict[str, any]]:
+def cargar_pacientes() -> list [dict[str, Any]]:
 
     """
     Carga los pacientes almacenados.
@@ -140,7 +140,7 @@ def cargar_pacientes() -> list [dict[str, any]]:
         raise ErrorAlmacenamiento(
             "la estructura principal del archivo debe ser una lista."
         )
-    pacientes_validos: list [dict[str, any]] = []
+    pacientes_validos: list [dict[str, Any]] = []
     for elemento in contenido:
         if isinstance(elemento,dict):
             pacientes_validos.append(elemento)
@@ -175,7 +175,7 @@ def escritura_atomica(
         ) from error
 
 def guardar_pacientes(
-        pacientes:list [dict[str,any]]
+        pacientes:list [dict[str,Any]]
 ) -> None:
     """
     Guarda la lista completa de pacientes.
@@ -203,3 +203,4 @@ def guardar_pacientes(
     )
 
     guardar_hash()
+    #fin
