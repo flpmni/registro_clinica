@@ -1,3 +1,11 @@
+"""
+Funciones para almacenar y recuperar pacientes.
+El módulo:
+- Crea el directorio de datos.
+- Guarda información en JSON.
+- Calcula un hash SHA-256.
+- Comprueba si el archivo fue modificado.
+"""
 import hashlib
 import json
 import os
@@ -17,17 +25,18 @@ class ErrorAlmacenamiento(Exception):
 
 def preparar_diretorio() -> None:
 
+    """Crea el directorio de datos si todavía no existe."""
     DIRECTORIO_DATOS.mkdir(
     parents=True,
     exist_ok=True,
     mode=0o700,
     )
-#Crea el directorio de datos si todavía no existe.
-
-
-
 
 def calcular_hash_archivo(ruta: Path) -> str:
+
+    """Calcula el hash SHA-256 de un archivo.
+    El archivo se lee por bloques para evitar cargar archivos grandes
+    completamente en memoria."""
 
     sha256 = hashlib.sha256()
     try:
@@ -39,11 +48,13 @@ def calcular_hash_archivo(ruta: Path) -> str:
             "No fue posible calcular la integridad del archivo."
             ) from error
     return sha256.hexdigest()
-#Calcula el hash SHA-256 de un archivo.
-#El archivo se lee por bloques para evitar cargar archivos grandes
-#completamente en memoria.
+
 
 def guardar_hash() -> None:
+
+    """
+    Calcula y guarda el hash del archivo de pacientes.
+    """
 
     if not ARCHIVO_PACIENTES.exists():
         raise ErrorAlmacenamiento(
@@ -60,10 +71,17 @@ def guardar_hash() -> None:
         raise ErrorAlmacenamiento(
             "no fue posible guardar el archivo de integridad."
         ) from error
-#Calcula y guarda el hash del archivo de pacientes.
+
 
 def verificar_integridad() -> bool:
-
+    """
+    Comprueba que el archivo JSON coincida con el hash guardado.
+    Returns:
+    True si la integridad es correcta.
+    Raises:
+    ErrorIntegridadDatos: Si el archivo fue modificado.
+    ErrorAlmacenamiento: Si no se puede revisar.
+    """
     if not ARCHIVO_PACIENTES.exists():
         return True
     if not ARCHIVO_HASH.exists():
@@ -91,10 +109,13 @@ def verificar_integridad() -> bool:
             "el archivo de pacientes ha sido modificado."
         )
     return True
-#Comprueba que el archivo JSON coincida con el hash guardado.
 
 def cargar_pacientes() -> list [dict[str, any]]:
 
+    """
+    Carga los pacientes almacenados.
+    Si el archivo no existe, retorna una lista vacía.
+    """
     preparar_diretorio()
 
     if not ARCHIVO_PACIENTES.exists():
@@ -124,14 +145,16 @@ def cargar_pacientes() -> list [dict[str, any]]:
         if isinstance(elemento,dict):
             pacientes_validos.append(elemento)
     return pacientes_validos
-#Carga los pacientes almacenados.
-#Si el archivo no existe, retorna una lista vacía.
 
 def escritura_atomica(
         ruta: Path,
         contenido: str,
 ) -> None:
-    
+    """
+    Escribe primero en un archivo temporal y luego lo reemplaza.
+    Esta técnica reduce el riesgo de dejar un archivo incompleto si
+    ocurre un problema durante la escritura.
+    """
     ruta_temporal = ruta.with_suffix(ruta.suffix + ".tmp")
 
     try:
@@ -150,14 +173,13 @@ def escritura_atomica(
         raise ErrorAlmacenamiento(
             "no fue posible guardar los datos."
         ) from error
-#Escribe primero en un archivo temporal y luego lo reemplaza.
-#Esta técnica reduce el riesgo de dejar un archivo incompleto si
-#ocurre un problema durant
 
 def guardar_pacientes(
         pacientes:list [dict[str,any]]
 ) -> None:
-    
+    """
+    Guarda la lista completa de pacientes.
+    """
     preparar_diretorio()
 
     if not isinstance(pacientes,list):
@@ -181,4 +203,3 @@ def guardar_pacientes(
     )
 
     guardar_hash()
-#Guarda la lista completa de pacientes.
