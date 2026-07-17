@@ -26,10 +26,10 @@ class ErrorAlmacenamiento(Exception):
 def preparar_diretorio() -> None:
 
     """Crea el directorio de datos si todavía no existe."""
-    DIRECTORIO_DATOS.mkdir(
-    parents=True,
-    exist_ok=True,
-    mode=0o700,
+        DIRECTORIO_DATOS.mkdir(
+        parents=True,
+        exist_ok=True,
+        mode=0o700,
     )
 
 def calcular_hash_archivo(ruta: Path) -> str:
