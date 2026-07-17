@@ -8,6 +8,7 @@ Incluye:
 """
 import secrets
 import string
+
 ALFABETO_SEGURO = string.ascii_uppercase + string.digits
 
 
@@ -41,6 +42,7 @@ def anonimizar_nombre(nombre: str) -> str:
 
     if not isinstance(nombre, str) or not nombre.strip():
         return "NO DISPONIBLE"
+        
     partes = nombre.strip().split()
 
     partes_anonimizadas = []
@@ -80,7 +82,9 @@ def anonimizar_correo(correo: str) -> str:
 
     if not isinstance(correo, str) or "@" not in correo:
         return "NO DISPONIBLE"
+        
     usuario, dominio = correo.rsplit("@", maxsplit=1)
+    
     if not usuario or not dominio:
         return "NO DISPONIBLE"
     if len(usuario) == 1:
