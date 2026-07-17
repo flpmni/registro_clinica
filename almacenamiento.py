@@ -74,16 +74,19 @@ def guardar_hash() -> None:
 
 
 def verificar_integridad() -> bool:
+
     """
     Comprueba que el archivo JSON coincida con el hash guardado.
+    
     Returns:
-    True si la integridad es correcta.
+        True si la integridad es correcta.
     Raises:
-    ErrorIntegridadDatos: Si el archivo fue modificado.
-    ErrorAlmacenamiento: Si no se puede revisar.
+        ErrorIntegridadDatos: Si el archivo fue modificado.
+        ErrorAlmacenamiento: Si no se puede revisar.
     """
     if not ARCHIVO_PACIENTES.exists():
         return True
+    
     if not ARCHIVO_HASH.exists():
         raise ErrorIntegridadDatos(
             "existe el archivo de pacientes, pero no su hash."
@@ -120,13 +123,14 @@ def cargar_pacientes() -> list [dict[str, Any]]:
 
     if not ARCHIVO_PACIENTES.exists():
         return []
+    
     verificar_integridad()
 
     try:
         with ARCHIVO_PACIENTES.open(
             "r",
             encoding="utf-8",
-            ) as archivo:
+        ) as archivo:
             contenido = json.load(archivo)
     except json.JSONDecodeError as error:
         raise ErrorAlmacenamiento(
@@ -140,7 +144,9 @@ def cargar_pacientes() -> list [dict[str, Any]]:
         raise ErrorAlmacenamiento(
             "la estructura principal del archivo debe ser una lista."
         )
+    
     pacientes_validos: list [dict[str, Any]] = []
+    
     for elemento in contenido:
         if isinstance(elemento,dict):
             pacientes_validos.append(elemento)
@@ -187,7 +193,7 @@ def guardar_pacientes(
             "los pacientes deben almacenarse en una lista."
         )
     try:
-        contenido = json.dump(
+        contenido = json.dumps(
             pacientes,
             ensure_ascii=False,
             indent=4,
@@ -203,4 +209,3 @@ def guardar_pacientes(
     )
 
     guardar_hash()
-    #fin
