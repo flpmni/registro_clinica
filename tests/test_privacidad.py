@@ -50,3 +50,4 @@ def test_vista_no_incluye_diagnostico() -> None:
     assert "diagnostico" not in vista
     assert vista["nombre"] == "A** P****"
     assert vista["rut"] == "********-5"
+    

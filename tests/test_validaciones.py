@@ -92,3 +92,4 @@ def test_sanitizar_estructura_con_campo_faltante() -> None:
     
     with pytest.raises(ValueError):
         sanitizar_estructura_paciente(datos)
+        
