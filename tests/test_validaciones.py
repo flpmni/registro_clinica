@@ -4,13 +4,13 @@ Pruebas de las funciones de validación.
 import pytest
 
 from validaciones import (
-    calcular_digito_verificador,
-    sanitizar_diagnostico,
-    sanitizar_estructura_paciente,
-    sanitizar_nombre,
-    validar_correo,
-    validar_edad,
-    validar_rut,
+        calcular_digito_verificador,
+        sanitizar_diagnostico,
+        sanitizar_estructura_paciente,
+        sanitizar_nombre,
+        validar_correo,
+        validar_edad,
+        validar_rut,
     )
 
 def test_sanitizar_nombre_valido() -> None:
@@ -71,11 +71,11 @@ def test_sanitizar_diagnostico_elimina_html() -> None:
 
 def test_sanitizar_estructura_completa() -> None:
     datos = {
-        "nombre": "Ana Pérez",
-        "rut": "12.345.678-5",
-        "edad": "35",
-        "correo": "ANA@example.com",
-        "diagnostico": "Control preventivo",
+            "nombre": "Ana Pérez",
+            "rut": "12.345.678-5",
+            "edad": "35",
+            "correo": "ANA@example.com",
+            "diagnostico": "Control preventivo",
         }
     resultado = sanitizar_estructura_paciente(datos)
 
@@ -86,9 +86,10 @@ def test_sanitizar_estructura_completa() -> None:
 
 def test_sanitizar_estructura_con_campo_faltante() -> None:
     datos = {
-    "nombre": "Ana Pérez",
-    "rut": "12.345.678-5",
+        "nombre": "Ana Pérez",
+        "rut": "12.345.678-5",
     }
     
     with pytest.raises(ValueError):
         sanitizar_estructura_paciente(datos)
+        

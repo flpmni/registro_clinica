@@ -2,11 +2,11 @@
 Pruebas de anonimización y seudonimización.
 """
 from privacidad import (
-    anonimizar_correo,
-    anonimizar_nombre,
-    anonimizar_rut,
-    crear_vista_anonimizada,
-    generar_id_paciente,
+        anonimizar_correo,
+        anonimizar_nombre,
+        anonimizar_rut,
+        crear_vista_anonimizada,
+        generar_id_paciente,
     )
 
 def test_generar_id_paciente() -> None:
@@ -31,19 +31,23 @@ def test_anonimizar_correo() -> None:
     resultado = anonimizar_correo(
         "ana.perez@example.com"
     )
+
     assert resultado == "a********@example.com"
 
 def test_vista_no_incluye_diagnostico() -> None:
     paciente = {
-    "id_paciente": "PAC-12345678",
-    "nombre": "Ana Pérez",
-    "rut": "12345678-5",
-    "edad": 35,
-    "correo": "ana@example.com",
-    "diagnostico": "Información sensible",
-    "fecha_registro": "2026-01-01T10:00:00+00:00",
+        "id_paciente": "PAC-12345678",
+        "nombre": "Ana Pérez",
+        "rut": "12345678-5",
+        "edad": 35,
+        "correo": "ana@example.com",
+        "diagnostico": "Información sensible",
+        "fecha_registro": "2026-01-01T10:00:00+00:00",
     }
+
     vista = crear_vista_anonimizada(paciente)
+
     assert "diagnostico" not in vista
     assert vista["nombre"] == "A** P****"
     assert vista["rut"] == "********-5"
+    
