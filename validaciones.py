@@ -142,7 +142,7 @@ def validar_rut(rut: str) -> str:
     if digito_recibido != digito_calculado:
         raise ValueError("El RUT ingresado no es válido.")
 
-    return f"{int(cuerpo)} - {digito_recibido}"
+    return f"{int(cuerpo)}-{digito_recibido}"
 
 
 def validar_edad(edad: Any) -> int:
