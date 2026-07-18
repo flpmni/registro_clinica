@@ -50,9 +50,9 @@ def anonimizar_nombre(nombre: str) -> str:
     for parte in partes:
         if len(parte) == 1:
             partes_anonimizadas.append("*")
-    else:
-        partes_anonimizadas.append(
-            parte[0] + "*" * (len(parte) - 1)
+        else:
+            partes_anonimizadas.append(
+                parte[0] + "*" * (len(parte) - 1)
         )
     return " ".join(partes_anonimizadas)
 
