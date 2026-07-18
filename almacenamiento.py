@@ -92,7 +92,7 @@ def verificar_integridad() -> bool:
             "existe el archivo de pacientes, pero no su hash."
         )
     try:
-        hash_guardado = ARCHIVO_HASH.read_txt(
+        hash_guardado = ARCHIVO_HASH.read_text(
             encoding="utf-8"
         ).strip()
     except OSError as error:
