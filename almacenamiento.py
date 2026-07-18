@@ -26,7 +26,7 @@ class ErrorAlmacenamiento(Exception):
 def preparar_diretorio() -> None:
 
     """Crea el directorio de datos si todavía no existe."""
-        DIRECTORIO_DATOS.mkdir(
+    DIRECTORIO_DATOS.mkdir(
         parents=True,
         exist_ok=True,
         mode=0o700,
